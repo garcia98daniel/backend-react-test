@@ -13,9 +13,25 @@ class ConstructorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function getConstructors()
     {
-        //
+        try {
+            $constructor = Constructor::all();
+                $response = [
+                    'data' => $constructor,
+                    'message' => "Constructoras listadas.",
+                ];
+
+                return response($response, 200);
+
+        } catch (QueryException $exception) {
+            $response = [
+                'message' => "Error al listar Constructoras",
+                'error' => $exception->getMessage(),
+            ];
+
+            return response($response , 500);
+        }
     }
 
     /**

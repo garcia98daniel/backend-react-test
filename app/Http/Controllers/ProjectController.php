@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
+use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
@@ -16,7 +17,7 @@ class ProjectController extends Controller
     public function getProjects()
     {
         try {
-            $projects = Project::all();
+            $projects = Project::with('constructors')->get();
                 $response = [
                     'data' => $projects,
                     'message' => "Proyectos listado.",
@@ -40,10 +41,12 @@ class ProjectController extends Controller
      * @param  \App\Http\Requests\StoreProjectRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function createProject(StoreProjectRequest $request)
+    public function createProject(Request $request)
     {
         try {
-            
+            $data = json_decode($request->getContent(), true);
+            $request = new Request($data);
+
             $fields = $request->validate([
                 'name' => 'required',
                 'address' => 'required',
@@ -94,7 +97,7 @@ class ProjectController extends Controller
     {
         
         try {
-            $project = Project::where("id", $id)->get();
+            $project = Project::where("id", $id)->first();
 
             if($project){
 
@@ -131,11 +134,14 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function editProject(UpdateProjectRequest $request)
+    public function editProject(Request $request)
     {
         try {
-            
+            $data = json_decode($request->getContent(), true);
+            $request = new Request($data);
+
             $fields = $request->validate([
+                'id' => 'required',
                 'name' => 'required',
                 'address' => 'required',
                 'constructors_id' => 'required',
@@ -161,7 +167,7 @@ class ProjectController extends Controller
             }
             
             $response = [
-                'message' => "Ups!, No se actualizar la información del proyecto."
+                'message' => "Ups!, No se pudo actualizar la información del proyecto."
             ];
 
             return response($response, 400);
