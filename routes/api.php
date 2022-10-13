@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ConstructorController;
+use App\Http\Controllers\InterestedUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +25,9 @@ Route::get('/projects/{id}', [ProjectController::class, 'getProject']);
 Route::patch('/projects/edit', [ProjectController::class, 'editProject']);
 Route::delete('/projects/delete/{id}', [ProjectController::class, 'deleteProject']);
 
+//interesados
+Route::get('/interesados/proyecto/{id}', [InterestedUserController::class, 'getInterestedPeople']);
+Route::post('/interesados/create', [InterestedUserController::class, 'createInterested']);
+Route::get('/interesados/{id}', [InterestedUserController::class, 'getInterested']);
+Route::patch('/interesados/edit', [InterestedUserController::class, 'editInterested']);
+Route::delete('/interesados/proyecto/delete/{id}', [InterestedUserController::class, 'deleteInterestedPeople']);
